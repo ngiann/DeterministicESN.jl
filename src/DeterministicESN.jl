@@ -4,6 +4,7 @@ module DeterministicESN
 
     include("AbstractDeterministicESN.jl")
     include("collectstates_faster.jl")
+    include("collectstates.jl")
     include("CRJ.jl")
     include("SCR.jl")
     include("util.jl")
