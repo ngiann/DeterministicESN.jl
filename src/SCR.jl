@@ -1,3 +1,7 @@
+##########################################################
+# Based on Rodan - minimum complexity echo state network #
+##########################################################
+
 mutable struct SCR  <: AbstractDeterministicESN
 
     # number of hidden neurons in reservoir
@@ -95,6 +99,8 @@ function setesn!(esn::SCR; w=w, v=v, b=b, α=α)
   # set the cyclic weight
   #----------------------------------------
 
+  # see Rodan, section III.A, bullet point 3, SCR topology
+  
   esn.Wrec[1, esn.N] = w  # upper right corner
 
   for n=1:esn.N-1      # lower sub diagonal

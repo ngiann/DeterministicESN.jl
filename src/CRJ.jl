@@ -1,3 +1,7 @@
+#########################################################################
+# Based on Rodan - Simple Deterministically Constructed Cycle Reservoir #
+#########################################################################
+
 mutable struct CRJ  <: AbstractDeterministicESN
 
     # number of hidden neurons in reservoir
@@ -63,10 +67,10 @@ function CRJ(; N = 100, ℓ = 5, f = tanh, seed = 1)
 
     # Determine number of jumps and last jump
 
-    numjumps     = 0
-    lastjumpunit = 0
+    numjumps, lastjumpunit = 0, 0
 
-    # see page 6 of Rodan, Tino
+    # see Rodan, Section 3, bullet point 3
+
     if mod(N, ℓ) == 0
         # then there are N/ℓ jumps
         numjumps = round(Int, N/ℓ)
@@ -109,9 +113,9 @@ function setesn!(esn::CRJ; w = w, v = v, b = b, α = α, wjump = wjump)
     # set the cyclic weight, same as in SCR.jl
     #-----------------------------------------
 
-    esn.Wrec[1, esn.N] = w  # upper right corner
+    esn.Wrec[1, esn.N] = w  # upper right corner, see Rodan, Section 3, bullet point 2
 
-    for n=1:esn.N-1      # lower sub diagonal
+    for n=1:esn.N-1         # lower sub diagonal, see Rodan, Section 3, bullet point 1
 
         esn.Wrec[n+1, n] = w
 
@@ -120,6 +124,8 @@ function setesn!(esn::CRJ; w = w, v = v, b = b, α = α, wjump = wjump)
     #----------------------------------------
     # Set jump entries
     #----------------------------------------
+
+    # see Rodan, Section 3, bullet point 3
 
     ℓ            = esn.ℓ
     lastjumpunit = esn.lastjumpunit
