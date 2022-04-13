@@ -4,26 +4,28 @@ sigmoid(x) = 1.0/(1.0 + exp(-x))
 leastsquares(X, y; λ=λ) = (X' * X + λ*I) \ (X' * y)
 
 
-function getreadouts(esn; inputs = inputs, outputs = outputs, λ = λ)
+function getreadouts(esn; inputs = inputs, outputs = outputs, λ = λ, washout = 0)
 
     X = esn(inputs)
 
-    leastsquares(X, outputs; λ = λ)
+    leastsquares(X[washout+1:end,:], outputs[washout+1:end]; λ = λ)
 
 end
 
 
-function getreadouts(esn, y,  λ)
+function getreadouts(esn, y,  λ, washout::Int)
 
-    getreadouts(esn; inputs = y[1:end-1], outputs = y[2:end], λ = λ)
+    getreadouts(esn; inputs = y[1:end-1], outputs = y[2:end], λ = λ, washout = washout)
 
 end
 
 
-function getreadouts_and_states(esn, y,  λ)
+function getreadouts_and_states(esn, y,  λ, washout::Int)
 
-    X = esn(y[1:end-1])
+    inputs, outputs  = y[1:end-1], y[2:end]
 
-    return leastsquares(X, y[2:end]; λ = λ), X
+    X = esn(inputs)[washout+1:end,:]
+
+    leastsquares(X, outputs[washout+1:end]; λ = λ), X
 
 end
