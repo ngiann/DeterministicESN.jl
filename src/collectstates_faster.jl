@@ -3,7 +3,7 @@ function collectstates(esn::AbstractESN, input)
 #------------------------------------------------------------
 
     # allocate matrix ...
-    X = zeros(length(input), esn.N)
+    X = ones(length(input), esn.N+1)
 
     # ... and call function that does the actual work
     collectstates!(X, esn, input)
@@ -58,6 +58,8 @@ function nextstep!(X, esn::AbstractESN, input, t, x, prealloc1, prealloc2)
         X[t, i] = x[i]
 
     end
+
+    X[t, esn.N+1] = 1.0 # serves as bias term
 
     nothing
 

@@ -3,7 +3,7 @@ function _collectstates(esn::AbstractESN, input)
 #------------------------------------------------------------
 
     # allocate matrix ...
-    X = zeros(length(input), esn.N)
+    X = ones(length(input), esn.N+1)
 
     # ... and call function that does the actual work
     _collectstates!(X, esn, input)
