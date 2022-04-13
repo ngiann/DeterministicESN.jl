@@ -61,7 +61,7 @@ function CRJ(; N = 100, ℓ = 5, f = tanh, seed = 1)
 
     V = Vinputsigns .* 0.0
 
-    α, v, b, w, wjump = 0.0, 0.0, 0.0, 0.0, 0.0
+    α, v, b, w, wjump = 1.0, 0.0, 0.0, 0.0, 0.0
 
 
 
@@ -90,7 +90,7 @@ end
 
 
 #-----------------------------------------------------------------
-function setesn!(esn::CRJ; w = w, v = v, b = b, α = α, wjump = wjump)
+function setesn!(esn::CRJ; w = w, v = v, b = b, α = 1.0, wjump = wjump)
 #-----------------------------------------------------------------
 
     esn.wjump = wjump

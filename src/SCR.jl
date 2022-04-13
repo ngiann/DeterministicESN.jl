@@ -46,7 +46,7 @@ function SCR(; N = 100, f = tanh, seed = 1)
 
   V = Vinputsigns .* 0.0
 
-  α, v, b, w = 0.0, 0.0, 0.0, 0.0
+  α, v, b, w = 1.0, 0.0, 0.0, 0.0
 
   return SCR(N, f, α, v, b, w, Vinputsigns, V, Wrec)
 
@@ -80,7 +80,7 @@ end
 ###############################################
 
 #----------------------------------------------
-function setesn!(esn::SCR; w=w, v=v, b=b, α=α)
+function setesn!(esn::SCR; w=w, v=v, b=b, α=1.0)
 #----------------------------------------------
 
   esn.w, esn.v, esn.b, esn.α = w, v, b, α
@@ -100,7 +100,7 @@ function setesn!(esn::SCR; w=w, v=v, b=b, α=α)
   #----------------------------------------
 
   # see Rodan, section III.A, bullet point 3, SCR topology
-  
+
   esn.Wrec[1, esn.N] = w  # upper right corner
 
   for n=1:esn.N-1      # lower sub diagonal
