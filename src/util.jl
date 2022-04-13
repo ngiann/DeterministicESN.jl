@@ -12,8 +12,8 @@ function getreadouts(esn; inputs = inputs, outputs = outputs, λ = λ)
 
 end
 
-function getreadouts(esn; seq = seq, λ = λ)
+function getreadouts(esn, y,  λ)
 
-    getreadouts(esn; inputs = seq[1:end-1], targets = seq[2:end], λ = λ)
+    getreadouts(esn; inputs = y[1:end-1], outputs = y[2:end], λ = λ)
 
 end
