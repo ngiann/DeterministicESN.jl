@@ -8,6 +8,7 @@ module DeterministicESN
     include("SCR.jl")
     include("util.jl")
 
-    export SCR, CRJ, setesn!, getparameters, getnumberofparameters, getreadouts
+    export SCR, CRJ, setesn!, getparameters, getnumberofparameters,
+            getreadouts, getreadouts_and_states
 
 end

@@ -12,11 +12,13 @@ function getreadouts(esn; inputs = inputs, outputs = outputs, λ = λ)
 
 end
 
+
 function getreadouts(esn, y,  λ)
 
     getreadouts(esn; inputs = y[1:end-1], outputs = y[2:end], λ = λ)
 
 end
+
 
 function getreadouts_and_states(esn, y,  λ)
 
