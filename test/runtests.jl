@@ -6,6 +6,7 @@ include("test_CRJ_simple.jl")
 include("test_simple_hidden_case_SCR.jl")
 include("test_SCR_CRJ_equivalance.jl")
 include("test_collectstates.jl")
+include("test_column_of_ones.jl")
 
 @testset "DeterministicESN.jl" begin
 
@@ -18,5 +19,7 @@ include("test_collectstates.jl")
     @test test_SCR_CRJ_equivalance()
 
     @test test_collectstates()
+
+    @test test_column_of_ones()
 
 end
