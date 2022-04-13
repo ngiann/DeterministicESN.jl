@@ -6,7 +6,8 @@ module DeterministicESN
     include("collectstates_faster.jl")
     include("CRJ.jl")
     include("SCR.jl")
+    include("util.jl")
 
-    export SCR, CRJ, setesn!, getparameters, getnumberofparameters
+    export SCR, CRJ, setesn!, getparameters, getnumberofparameters, getreadouts
 
 end
