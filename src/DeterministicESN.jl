@@ -1,5 +1,9 @@
 module DeterministicESN
 
+    using GLMakie
+    using GraphMakie
+    using Graphs
+
     using LinearAlgebra, Random
 
     include("AbstractDeterministicESN.jl")
@@ -10,6 +14,6 @@ module DeterministicESN
     include("util.jl")
 
     export SCR, CRJ, setesn!, getparameters, getnumberofparameters,
-            getreadouts, getreadouts_and_states
+            getreadouts, getreadouts_and_states, plotesn
 
 end
