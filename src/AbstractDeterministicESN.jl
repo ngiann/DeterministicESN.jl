@@ -24,14 +24,15 @@ end
 
 function plotesn(esn::DeterministicESN.AbstractESN)
 
-  g = SimpleDiGraph(esn.Wrec)
-
+    g = SimpleDiGraph(esn.Wrec)
 
     labels = Vector{String}(undef, ne(g))
 
     for (i, e) in enumerate(edges(g))
 
-      labels[i] = repr(round(esn.Wrec[dst(e), src(e)], digits=3))
+      weight = esn.Wrec[dst(e), src(e)] == 0 ? esn.Wrec[src(e), dst(e)] : esn.Wrec[dst(e), src(e)]
+
+      labels[i] = repr(round(weight, digits=2))
 
     end
 
