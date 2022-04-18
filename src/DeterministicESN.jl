@@ -1,7 +1,7 @@
 module DeterministicESN
 
-    using GLMakie
-    using GraphMakie
+    # using GLMakie
+    # using GraphMakie
     using Graphs
 
     using LinearAlgebra, Random
