@@ -12,8 +12,9 @@ module DeterministicESN
     include("CRJ.jl")
     include("SCR.jl")
     include("util.jl")
+    include("createnarma.jl")
 
     export SCR, CRJ, setesn!, getparameters, getnumberofparameters,
-            getreadouts, getreadouts_and_states, plotesn
+            getreadouts, getreadouts_and_states, plotesn, generatenarmadataset, createnarmaseries
 
 end
