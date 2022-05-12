@@ -20,7 +20,7 @@ function getreadouts(esn, y,  λ, washout::Int)
 end
 
 
-function getreadouts_and_states(esn, y,  λ, washout::Int)
+function get_readouts_and_states(esn, y,  λ, washout::Int)
 
     inputs, outputs  = y[1:end-1], y[2:end]
 
