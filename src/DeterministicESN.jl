@@ -4,7 +4,7 @@ module DeterministicESN
     # using GraphMakie
     using Graphs
 
-    using LinearAlgebra, Random
+    using LinearAlgebra, Random, Distributions
 
     include("AbstractDeterministicESN.jl")
     include("collectstates_faster.jl")
@@ -13,8 +13,9 @@ module DeterministicESN
     include("SCR.jl")
     include("util.jl")
     include("createnarma.jl")
+    include("createcauchy.jl")
 
     export SCR, CRJ, setesn!, getparameters, getnumberofparameters,
-            getreadouts, get_readouts_and_states, plotesn, generatenarmadataset, createnarmaseries
+            getreadouts, get_readouts_and_states, plotesn, generatenarmadataset, generatecauchydataset
 
 end

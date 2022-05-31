@@ -60,7 +60,7 @@ function createnarmaseries(Order, T, seed = 1)
 		# 20th order NARMA system
 
 		for t in 20:T-1
-		    Y[t+1] = tanh(0.3*Y[t] + 0.05*Y[t]*sum(Y[t-collect(0:19)]) + 1.5*S[t-19]*S[t] + 0.01) + 0.2
+		    Y[t+1] = tanh(0.3*Y[t] + 0.05*Y[t]*sum(Y[t.-collect(0:19)]) + 1.5*S[t-19]*S[t] + 0.01) + 0.2
 		end
 
 	elseif Order==30
@@ -68,7 +68,7 @@ function createnarmaseries(Order, T, seed = 1)
 		# 30th order NARMA system
 
 		for t in 30:T-1
-		    Y[t+1] = 0.2*Y[t] + 0.004*Y[t]*sum(Y[t-collect(0:29)]) + 1.5*S[t-29]*S[t] + 0.201
+		    Y[t+1] = 0.2*Y[t] + 0.004*Y[t]*sum(Y[t.-collect(0:29)]) + 1.5*S[t-29]*S[t] + 0.201
 		end
 
 	else
