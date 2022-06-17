@@ -1,4 +1,4 @@
-function tuneCRJreservoir(inputs, targets; parallel = false, iterations = 10, reservoirsize = 100, ℓ = 10, split = 0.5, washout = 20)
+function tuneCRJreservoir(inputs, targets; parallel = false, iterations = 10, reservoirsize = 100, ℓ = 10, split = 0.5, washout = 20, λ = 1e-2)
 
 
     # make sure there are as many inputs as targets
@@ -21,6 +21,8 @@ function tuneCRJreservoir(inputs, targets; parallel = false, iterations = 10, re
 
     function unpack(params)
 
+        @assert(length(params) == 5)
+
         local w     = transformbetween(params[1], 0.0,  1.0)
 
         local v     = transformbetween(params[2], 0.0,  1.0)
@@ -31,9 +33,9 @@ function tuneCRJreservoir(inputs, targets; parallel = false, iterations = 10, re
 
         local α     = transformbetween(params[5], 0.0,  1.0)
 
-        local λ     = transformbetween(params[6], 1e-8, 1.0)
+        # local λ     = transformbetween(params[6], 1e-8, 1.0)
 
-        return w, v, b, wjump, α, λ
+        return w, v, b, wjump, α
 
     end
 
@@ -41,7 +43,7 @@ function tuneCRJreservoir(inputs, targets; parallel = false, iterations = 10, re
     # Objective based on predicting unseen part of sequence
     #-----------------------------------------------------------------
 
-    function singlesequenceobjective(input, target, λ)
+    function singlesequenceobjective(input, target)
 
         @assert(length(input) == length(target))
 
@@ -65,13 +67,13 @@ function tuneCRJreservoir(inputs, targets; parallel = false, iterations = 10, re
 
         local fitness = 0.0
 
-        local w, v, b, wjump, α, λ = unpack(params)
+        local w, v, b, wjump, α = unpack(params)
 
         # set parameters esn
 
         setesn!(esn; w = w, v = v, b = b, α = α, wjump = wjump)
 
-        parallel ? sum(pmap((x, y) -> singlesequenceobjective(x, y, λ), inputs, targets)) : sum(map((x, y) -> singlesequenceobjective(x, y, λ), inputs, targets))
+        parallel ? sum(pmap((x, y) -> singlesequenceobjective(x, y), inputs, targets)) : sum(map((x, y) -> singlesequenceobjective(x, y), inputs, targets))
 
     end
 
@@ -97,19 +99,17 @@ function tuneCRJreservoir(inputs, targets; parallel = false, iterations = 10, re
 
     opt = Optim.Options(iterations = iterations, show_trace = true, show_every = 1)
 
-    initsol = randn(6)
+    initsol = randn(5)
 
     display(unpack(initsol))
 
     result = optimize(objective, initsol, NelderMead(), opt)
 
-    let 
-
-        w, v, b, wjump, α, λ = unpack(result.minimizer)
+    # return optimised parameters
+    
+    w, v, b, wjump, α = unpack(result.minimizer)
         
-        setesn!(esn; w = w, v = v, b = b, α = α, wjump = wjump)
-
-    end
+    setesn!(esn; w = w, v = v, b = b, α = α, wjump = wjump)
 
     return esn
 
