@@ -11,11 +11,11 @@ function generatenarmadataset(NseqPer = 100, Tlength = 1000, seed = 1)
 		for order in [10, 20, 30]
 			for index in 1:NseqPer
 
-				auxA, auxB = createnarmaseries(order, Tlength, seed + index*order)
+				s, y = createnarmaseries(order, Tlength, seed + index*order)
 
 				counter += 1
-				S[counter,:] = reshape(auxA, Tlength)
-				Y[counter,:] = reshape(auxB, Tlength)
+				S[counter,:] = vec(s)
+				Y[counter,:] = vec(y)
 
 			end
 		end
