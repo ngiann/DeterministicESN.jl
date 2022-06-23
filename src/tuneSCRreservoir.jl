@@ -1,5 +1,8 @@
-function tuneCRJreservoir(inputs, targets; parallel = false, iterations = 10, reservoirsize = 100, ℓ = 10, split = 0.5, washout = 20, λ = 1e-2)
+function tuneSCRreservoir(inputs, targets; parallel = false, iterations = 10, reservoirsize = 100, split = 0.5, washout = 20, λ = 1e-2, seed = 1)
 
+    display("v0.1")
+
+    rg = MersenneTwister(seed)
 
     # make sure there are as many inputs as targets
 
@@ -12,7 +15,7 @@ function tuneCRJreservoir(inputs, targets; parallel = false, iterations = 10, re
 
     # instantiate esn
 
-    esn = CRJ(N = reservoirsize, ℓ = ℓ)
+    esn = SCR(N = reservoirsize)
 
 
     #-----------------------------------------------------------------
@@ -21,7 +24,7 @@ function tuneCRJreservoir(inputs, targets; parallel = false, iterations = 10, re
 
     function unpack(params)
 
-        @assert(length(params) == 5)
+        @assert(length(params) == 3)
 
         local w     = transformbetween(params[1], 0.0,  1.0)
 
@@ -29,13 +32,7 @@ function tuneCRJreservoir(inputs, targets; parallel = false, iterations = 10, re
 
         local b     =                  params[3]
 
-        local wjump = transformbetween(params[4], 0.0,  1.0)
-
-        local α     = transformbetween(params[5], 0.0,  1.0)
-
-        # local λ     = transformbetween(params[6], 1e-8, 1.0)
-
-        return w, v, b, wjump, α
+        return w, v, b
 
     end
 
@@ -49,7 +46,7 @@ function tuneCRJreservoir(inputs, targets; parallel = false, iterations = 10, re
 
         local train_input, train_target, test_input, test_target = splitsequence(input, target)
 
-        local W = getreadouts(esn; inputs = train_input, outputs = train_target, λ = λ, washout = washout)
+        local W = getreadouts(esn; input = train_input, output = train_target, λ = λ, washout = washout)
 
         # get predictions on test data
 
@@ -57,8 +54,7 @@ function tuneCRJreservoir(inputs, targets; parallel = false, iterations = 10, re
 
         local prediction = vec(Xtest * W)
 
-        sum((test_target[washout+1:end] - prediction[washout+1:end]).^2)
-
+        return sum((test_target[washout+1:end] - prediction[washout+1:end]).^2)
 
     end
 
@@ -67,11 +63,11 @@ function tuneCRJreservoir(inputs, targets; parallel = false, iterations = 10, re
 
         local fitness = 0.0
 
-        local w, v, b, wjump, α = unpack(params)
+        local w, v, b = unpack(params)
 
         # set parameters esn
 
-        setesn!(esn; w = w, v = v, b = b, α = α, wjump = wjump)
+        setesn!(esn; w = w, v = v, b = b)
 
         parallel ? sum(pmap((x, y) -> singlesequenceobjective(x, y), inputs, targets)) : sum(map((x, y) -> singlesequenceobjective(x, y), inputs, targets))
 
@@ -88,7 +84,7 @@ function tuneCRJreservoir(inputs, targets; parallel = false, iterations = 10, re
 
         local mark = ceil(Int, length(input) * split)
 
-        input[1:mark],  target[1:mark],  input[1+mark:end],  target[1+mark:end]
+        input[1:mark], target[1:mark], input[1+mark:end], target[1+mark:end]
     
     end
 
@@ -99,7 +95,7 @@ function tuneCRJreservoir(inputs, targets; parallel = false, iterations = 10, re
 
     opt = Optim.Options(iterations = iterations, show_trace = true, show_every = 1)
 
-    initsol = randn(5)
+    initsol = [invtransformbetween(rand(rg), 0, 1); invtransformbetween(rand(rg), 0, 1); randn(rg)]
 
     display(unpack(initsol))
 
@@ -107,9 +103,9 @@ function tuneCRJreservoir(inputs, targets; parallel = false, iterations = 10, re
 
     # return optimised parameters
     
-    w, v, b, wjump, α = unpack(result.minimizer)
+    w, v, b = unpack(result.minimizer)
         
-    setesn!(esn; w = w, v = v, b = b, α = α, wjump = wjump)
+    setesn!(esn; w = w, v = v, b = b)
 
     return esn
 
