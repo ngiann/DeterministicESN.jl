@@ -8,6 +8,7 @@ function test_SCR_CRJ_equivalance(seed = 1, tol = 1e-6)
 
     setesn!(scr, w = 0.1, v = 0.2, b = 0.3)
 
+    # A CRJ with jump weight set to 0 should be equivalent to SCR
     setesn!(crj, w = 0.1, v = 0.2, b = 0.3, wjump = 0)
 
     x = randn(rg, 10000)
