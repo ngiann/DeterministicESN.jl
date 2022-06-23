@@ -15,10 +15,10 @@ module DeterministicESN
     include("createnarma.jl")
     include("createcauchy.jl")
 
-    include("tuneCRJreservoir.jl")
+    include("tuneSCRreservoir.jl")
 
     export SCR, CRJ, setesn!, getparameters, getnumberofparameters,
             getreadouts, get_readouts_and_states, plotesn, generatenarmadataset, generatecauchydataset,
-            tuneCRJreservoir
+            tuneSCRreservoir
 
 end
