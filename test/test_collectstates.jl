@@ -10,6 +10,7 @@ function test_collectstates(seed=1, tol = 1e-6)
 
     s = randn(rg, 10_000)
 
+    # collect states both ways
     H1 = DeterministicESN.collectstates(esn, s)
     H2 = DeterministicESN._collectstates(esn, s)
 
